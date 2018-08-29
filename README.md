@@ -28,8 +28,9 @@ DB.findUser('thelegend97').then(user => {
 
 Q-methods return Promises that will eventually resolve once the resource is ready. After the
 resource is ready, methods execute as written. From the caller's perspective, the behavior is
-the same before and after `Q.ready` is called, always returning a Promise. Note that your
-methods must return Promises or Promise-like objects for this to be true.
+the same before and after `Q.ready` is called, always returning a Promise.
+
+Wrapped methods must be async functions or return a Promise or Promise-like object.
 
 ## API
 
