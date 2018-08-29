@@ -1,0 +1,35 @@
+{
+  "name": "q-method",
+  "version": "1.0.0",
+  "description": "Life is too short to wait for \"ready\" callbacks. Q up method calls and execute when ready.",
+  "main": "q.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "tape ./test/test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cutejs/q-method.git"
+  },
+  "keywords": [
+    "method",
+    "queue",
+    "async",
+    "wait",
+    "ready",
+    "util",
+    "prototype",
+    "promises"
+  ],
+  "author": "Peter Fesz-Nguyen",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/cutejs/q-method/issues"
+  },
+  "homepage": "https://github.com/cutejs/q-method#readme",
+  "devDependencies": {
+    "tape": "^4.9.1"
+  }
+}
