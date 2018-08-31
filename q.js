@@ -36,16 +36,21 @@ Q.ready = function (instance) {
 	}
 	if (Array.isArray(queue)) {
 		// queue must be flushed
-		Promise.all(queue.map(q => {
-			const p = q.method.call(instance, ...q.args)
-			if (!(p instanceof Object && 'then' in p)) {
-				return q.reject(new TypeError('Q wrapped method must return a Promise'))
-			}
-			return p.then(result => {
-				q.resolve(result)
-			}).catch(q.reject)
-		}))
 		Q._map.set(instance, true)
+		for (let i = 0; i < queue.length; i++) {
+			const q = queue[i]
+			if (Q.isReady(instance)) {
+				const p = q.method.call(instance, ...q.args)
+				if (!(p instanceof Object && 'then' in p)) {
+					q.reject(new TypeError('Q wrapped method must return a Promise'))
+					continue
+				}
+				p.then(q.resolve).catch(q.reject)
+			} else {
+				Q._map.set(instance, queue.slice(i))
+				break
+			}
+		}
 	}
 	// else instance is already ready, this has no effect
 }

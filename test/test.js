@@ -13,6 +13,14 @@ function Database () {
 			foo: () => Promise.resolve('foo'),
 			bar: () => Promise.resolve('bar'),
 			exploder: () => Promise.reject(new Error('kaboom!')),
+			pauser: () => {
+				Q.wait(this)
+				setTimeout(() => {
+					this.db.future = () => Promise.resolve('future')
+					Q.ready(this)
+				}, 300)
+				return Promise.resolve('pauser')
+			},
 		}
 		Q.ready(this)
 	}, 300)
@@ -135,4 +143,21 @@ test('Expect Q.wait to resume queueing, yet return correct results', t => {
 
 		Q.ready(DB)
 	}, 600)
+})
+
+test('Expect to be able to pause and resume while in the middle of clearing a queue', async t => {
+	const DB = new Database()
+
+	const foo = DB.get('foo')
+	const pauser = DB.get('pauser').then(result => {
+		t.equal(Q.isReady(DB), false, 'paused execution')
+		return result
+	})
+	const future = DB.get('future')
+
+	t.equal(await foo, 'foo')
+	t.equal(await pauser, 'pauser')
+	t.equal(await future, 'future')
+
+	t.end()
 })
